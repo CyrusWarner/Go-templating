@@ -1,7 +1,9 @@
 package main
 
+// Think of templates as a containernholding all of your templates
 import (
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"os"
@@ -15,21 +17,15 @@ func main() {
 
 // running go main.go > index.html will dump the template html into an index file
 func CreateTemplateWithDumpingToIndexFile() {
-	name := "Cyrus Warner"
-	template := `
-	<!DOCTYPE html>
-	<html lang="en">
-	<head>
-	<meta charset="TUF-8>
-	<title>Hello World!</title>
-	</head>
-	<body>
-	<h1>` + name + `</h1>
-	</body>
-	</html>
-	`
+	tpl, err := template.ParseFiles("tpl.gohtml") // Parses the files and returns a pointer to the template and an error
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-	fmt.Println(template)
+	err = tpl.Execute(os.Stdout, nil) // executes the template
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func CreateTemplateByCreatingAFileUsingTheOsPackage() {
